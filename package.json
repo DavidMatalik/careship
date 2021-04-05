@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "watch": "npx webpack --watch",
+    "watch": "jest --watch",
     "test": "jest"
   },
   "keywords": [],
