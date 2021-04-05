@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://careship/./src/index.js"],"names":[],"mappings":";;;;;AAAA;AACA;AACA;;AAEA","file":"main.js","sourcesContent":["function test() {\n  console.log('Everything still works')\n}\n\ntest()\n"],"sourceRoot":""}
