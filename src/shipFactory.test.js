@@ -1,4 +1,3 @@
-import { TestScheduler } from '@jest/core'
 import shipFactory from './shipFactory'
 
 test('sendGift returns true', () => {
