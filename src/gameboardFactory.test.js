@@ -2,6 +2,7 @@ import gameboardFactory from './gameboardFactory'
 
 const create2DArray = (size) => {
   const myArray = []
+
   for (let i = 0; i < size; i++) {
     myArray[i] = new Array(size).fill(undefined)
   }
@@ -10,11 +11,14 @@ const create2DArray = (size) => {
 
 test('placeShip method calls shipFactory', () => {
   let fakeShipFactoryIsCalled = false
+
   const fakeShipFactory = (num) => {
     fakeShipFactoryIsCalled = true
   }
   const gameBoard = gameboardFactory(10, fakeShipFactory)
+
   gameBoard.placeShip([[1, 1]])
+
   expect(fakeShipFactoryIsCalled).toBe(true)
 })
 
@@ -31,6 +35,7 @@ test('placeShip method changes boardStatus for small ship', () => {
 
   gameBoard.placeShip([[1, 1]])
   expectedArray[1][1] = fakeShip
+
   expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
 })
 
@@ -48,9 +53,11 @@ test('placeShip method changes boardStatus for medium ship', () => {
     [1, 2],
     [1, 3],
   ])
+
   expectedArray[1][1] = fakeShip
   expectedArray[1][2] = fakeShip
   expectedArray[1][3] = fakeShip
+
   expect(fakeShipFactory).toBeCalledWith(3)
   expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
 })
@@ -68,6 +75,7 @@ test('receiveGift tracks succesful gift', () => {
   expectedArray[1][1] = true
   gameBoard.placeShip([[1, 1]])
   gameBoard.receiveGift([1, 1])
+
   expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
 })
 
@@ -86,11 +94,13 @@ test('receiveGift tracks missed gift', () => {
   expectedArray[0][1] = false
   gameBoard.placeShip([[1, 1]])
   gameBoard.receiveGift([0, 1])
+
   expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
 })
 
 test('sendGift method of the correct ship gets called', () => {
   let counter = 0
+
   const fakeShipFactory = (num) => {
     return {
       sendGift: () => {
@@ -107,6 +117,7 @@ test('sendGift method of the correct ship gets called', () => {
   ])
   gameBoard.receiveGift([1, 1])
   gameBoard.receiveGift([1, 2])
+
   expect(counter).toBe(2)
 })
 
@@ -127,6 +138,7 @@ test('areAllSupplied returns true for several ships', () => {
   gameBoard.receiveGift([1, 1])
   gameBoard.receiveGift([2, 1])
   gameBoard.receiveGift([2, 2])
+
   expect(gameBoard.areAllSupplied()).toBe(true)
 })
 
@@ -146,5 +158,6 @@ test('areAllSupplied returns false for several ships', () => {
     [2, 1],
     [2, 2],
   ])
+
   expect(gameBoard.areAllSupplied()).toBe(false)
 })

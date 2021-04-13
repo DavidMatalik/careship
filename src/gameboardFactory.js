@@ -1,29 +1,33 @@
 export default function gameBoardFactory(size, shipFactory) {
   let boardStatus = []
   let ships = []
+
   initBoardStatus()
 
   // Create a ship and put it on given coordinates
   const placeShip = (coords) => {
     const shipLen = coords.length
     const index = ships.push(shipFactory(shipLen)) - 1
+
     coords.forEach((coord) => {
       boardStatus[coord[0]][coord[1]] = ships[index]
     })
-    return true
   }
 
   const receiveGift = (coordPair) => {
     let fieldValue = boardStatus[coordPair[0]][coordPair[1]]
+
     // Check if fieldValue has ship
     if (typeof fieldValue === 'object') {
       fieldValue.sendGift()
       fieldValue = true
     }
+
     // Check if fieldValue is empty
     if (fieldValue === undefined) {
       fieldValue = false
     }
+
     boardStatus[coordPair[0]][coordPair[1]] = fieldValue
   }
 
@@ -34,6 +38,7 @@ export default function gameBoardFactory(size, shipFactory) {
         return false
       }
     }
+
     // Otherwise return true
     return true
   }
