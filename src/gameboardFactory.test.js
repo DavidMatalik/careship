@@ -1,13 +1,13 @@
 import gameboardFactory from './gameboardFactory'
 
-const create2DArray = (size) => {
-  const myArray = []
+const arrSize = 10
+let fakeArr = []
 
-  for (let i = 0; i < size; i++) {
-    myArray[i] = new Array(size).fill(undefined)
+beforeEach(() => {
+  for (let i = 0; i < arrSize; i++) {
+    fakeArr[i] = new Array(arrSize).fill(undefined)
   }
-  return myArray
-}
+})
 
 test('placeShip method calls shipFactory', () => {
   let fakeShipFactoryIsCalled = false
@@ -29,14 +29,16 @@ test('placeShip method changes boardStatus for small ship', () => {
       isSupplied: '',
     }
   }
-  const expectedArray = create2DArray(10)
+  // const expectedArray = create2DArray(10)
   const fakeShip = fakeShipFactory(1)
   const gameBoard = gameboardFactory(10, fakeShipFactory)
 
   gameBoard.placeShip([[1, 1]])
-  expectedArray[1][1] = fakeShip
+  // expectedArray[1][1] = fakeShip
+  fakeArr[1][1] = fakeShip
 
-  expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
+  // expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
+  expect(gameBoard.getBoardStatus()).toStrictEqual(fakeArr)
 })
 
 test('placeShip method changes boardStatus for medium ship', () => {
@@ -44,7 +46,6 @@ test('placeShip method changes boardStatus for medium ship', () => {
     sendGift: '',
     isSupplied: '',
   })
-  const expectedArray = create2DArray(10)
   const fakeShip = fakeShipFactory()
   const gameBoard = gameboardFactory(10, fakeShipFactory)
 
@@ -54,12 +55,12 @@ test('placeShip method changes boardStatus for medium ship', () => {
     [1, 3],
   ])
 
-  expectedArray[1][1] = fakeShip
-  expectedArray[1][2] = fakeShip
-  expectedArray[1][3] = fakeShip
+  fakeArr[1][1] = fakeShip
+  fakeArr[1][2] = fakeShip
+  fakeArr[1][3] = fakeShip
 
   expect(fakeShipFactory).toBeCalledWith(3)
-  expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
+  expect(gameBoard.getBoardStatus()).toStrictEqual(fakeArr)
 })
 
 test('receiveGift tracks succesful gift', () => {
@@ -69,14 +70,13 @@ test('receiveGift tracks succesful gift', () => {
       isSupplied: '',
     }
   }
-  const expectedArray = create2DArray(10)
   const gameBoard = gameboardFactory(10, fakeShipFactory)
 
-  expectedArray[1][1] = true
+  fakeArr[1][1] = true
   gameBoard.placeShip([[1, 1]])
   gameBoard.receiveGift([1, 1])
 
-  expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
+  expect(gameBoard.getBoardStatus()).toStrictEqual(fakeArr)
 })
 
 test('receiveGift tracks missed gift', () => {
@@ -86,16 +86,15 @@ test('receiveGift tracks missed gift', () => {
       isSupplied: '',
     }
   }
-  const expectedArray = create2DArray(10)
   const fakeShip = fakeShipFactory()
   const gameBoard = gameboardFactory(10, fakeShipFactory)
 
-  expectedArray[1][1] = fakeShip
-  expectedArray[0][1] = false
+  fakeArr[1][1] = fakeShip
+  fakeArr[0][1] = false
   gameBoard.placeShip([[1, 1]])
   gameBoard.receiveGift([0, 1])
 
-  expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
+  expect(gameBoard.getBoardStatus()).toStrictEqual(fakeArr)
 })
 
 test('sendGift method of the correct ship gets called', () => {

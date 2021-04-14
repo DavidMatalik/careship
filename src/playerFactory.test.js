@@ -1,14 +1,13 @@
 import playerFactory from './playerFactory'
 
-const create2DArray = (size) => {
-  const myArray = []
+const arrSize = 10
+let fakeArr = []
 
-  for (let i = 0; i < size; i++) {
-    myArray[i] = new Array(size).fill(undefined)
+beforeEach(() => {
+  for (let i = 0; i < arrSize; i++) {
+    fakeArr[i] = new Array(arrSize).fill(undefined)
   }
-
-  return myArray
-}
+})
 
 const createFakeGameboard = (arr) => {
   const fakeGameboardFactory = (size, shipFactory) => {
@@ -36,8 +35,6 @@ test('A player object has default name', () => {
 })
 
 test('chooseField updates gameBoard for human players', () => {
-  let fakeArr = create2DArray(10)
-
   const fakeGameboard = createFakeGameboard(fakeArr)
   const player = playerFactory(fakeGameboard, 'John')
 
@@ -47,8 +44,6 @@ test('chooseField updates gameBoard for human players', () => {
 })
 
 test('chooseField updates gameBoard for computer players', () => {
-  let fakeArr = create2DArray(10)
-
   const fakeGameboard = createFakeGameboard(fakeArr)
   const computerPlayer = playerFactory(fakeGameboard)
 
@@ -64,8 +59,6 @@ test('chooseField updates gameBoard for computer players', () => {
 })
 
 test('AI does not pick same coords as before', () => {
-  let fakeArr = create2DArray(10)
-
   const fakeGameboard = createFakeGameboard(fakeArr)
   const computerPlayer = playerFactory(fakeGameboard)
 
