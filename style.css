@@ -1,3 +1,44 @@
-body {
-  background-color: red;
+h1 {
+  background-color: pink;
+  text-align: center;
+  padding: 20px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+#board-container {
+  width: 90vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 0 auto 0 auto;
+}
+
+#board-1,
+#board-2 {
+  margin-top: 50px;
+  min-width: 500px;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+}
+
+.field {
+  background-color: lightgrey;
+  /* Calculation of width/border/height should happen
+  in JS */
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  width: 49px;
+  height: 49px;
+}
+
+form {
+  width: 200px;
+  margin: 30px auto 0 auto;
+  display: flex;
+  flex-direction: column;
 }
