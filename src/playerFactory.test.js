@@ -1,28 +1,30 @@
 import playerFactory from './playerFactory'
 
+// Possible to use same beforeeach across multiple files?
+// The for-loop to create an array is also in gameBoardFactory
+
 const arrSize = 10
 let fakeArr = []
+let fakeGameboard = null
 
 beforeEach(() => {
   for (let i = 0; i < arrSize; i++) {
     fakeArr[i] = new Array(arrSize).fill(undefined)
   }
-})
 
-const createFakeGameboard = (arr) => {
   const fakeGameboardFactory = (size, shipFactory) => {
     return {
       placeShip: '',
       receiveGift: (coordPair) => {
-        arr[coordPair[0]][coordPair[1]] = false
+        fakeArr[coordPair[0]][coordPair[1]] = false
       },
       areAllSupplied: '',
-      getBoardStatus: () => arr,
+      getBoardStatus: () => fakeArr,
     }
   }
 
-  return fakeGameboardFactory(10, {})
-}
+  fakeGameboard = fakeGameboardFactory(10, {})
+})
 
 test('A player object has a given name', () => {
   const gameBoard = {}
@@ -35,7 +37,6 @@ test('A player object has default name', () => {
 })
 
 test('chooseField updates gameBoard for human players', () => {
-  const fakeGameboard = createFakeGameboard(fakeArr)
   const player = playerFactory(fakeGameboard, 'John')
 
   player.chooseField([1, 1])
@@ -44,7 +45,6 @@ test('chooseField updates gameBoard for human players', () => {
 })
 
 test('chooseField updates gameBoard for computer players', () => {
-  const fakeGameboard = createFakeGameboard(fakeArr)
   const computerPlayer = playerFactory(fakeGameboard)
 
   computerPlayer.chooseField()
@@ -59,7 +59,6 @@ test('chooseField updates gameBoard for computer players', () => {
 })
 
 test('AI does not pick same coords as before', () => {
-  const fakeGameboard = createFakeGameboard(fakeArr)
   const computerPlayer = playerFactory(fakeGameboard)
 
   for (let i = 0; i < 100; i++) {
