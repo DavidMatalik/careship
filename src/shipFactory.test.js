@@ -1,10 +1,5 @@
 import shipFactory from './shipFactory'
 
-test('sendGift returns true', () => {
-  const ship = shipFactory(1)
-  expect(ship.sendGift(0)).toBe(true)
-})
-
 test('isSupplied returns true if ship is full of gifts', () => {
   const ship = shipFactory(1)
   ship.sendGift(0)

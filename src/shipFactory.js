@@ -1,9 +1,10 @@
 export default function shipFactory(len) {
   const suppliedSections = new Array(len).fill(false)
 
-  // Put gift at appropriate section of ship
-  const sendGift = (num) => {
-    return (suppliedSections[num] = true)
+  // Update supply status of a ship
+  const sendGift = () => {
+    suppliedSections.push(true)
+    suppliedSections.shift()
   }
 
   // If whole ship is supllied with gifts return true
