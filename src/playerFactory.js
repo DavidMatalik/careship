@@ -22,5 +22,9 @@ export default function playerFactory(gameBoard, name = 'Computer') {
     return [coord1, coord2]
   }
 
-  return { name, chooseField }
+  const getName = () => {
+    return name
+  }
+
+  return { getName, chooseField }
 }

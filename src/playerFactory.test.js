@@ -26,14 +26,16 @@ beforeEach(() => {
   fakeGameboard = fakeGameboardFactory(10, {})
 })
 
-test('A player object has a given name', () => {
+test('getName returns a set name', () => {
   const gameBoard = {}
-  expect(playerFactory(gameBoard, 'John')).toHaveProperty('name', 'John')
+  const player = playerFactory(gameBoard, 'John')
+  expect(player.getName()).toBe('John')
 })
 
-test('A player object has default name', () => {
+test('getName returns as default name', () => {
   const gameBoard = {}
-  expect(playerFactory(gameBoard)).toHaveProperty('name', 'Computer')
+  const player = playerFactory(gameBoard)
+  expect(player.getName()).toBe('Computer')
 })
 
 test('chooseField updates gameBoard for human players', () => {
