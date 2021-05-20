@@ -458,6 +458,8 @@ __webpack_require__.r(__webpack_exports__);
   const body = document.querySelector('body')
 
   const heading = document.createElement('h1')
+  const container = document.createElement('div')
+  const dragContainer = document.createElement('div')
   const boardsContainer = document.createElement('div')
   const board1Container = document.createElement('div')
   const board2Container = document.createElement('div')
@@ -493,6 +495,20 @@ __webpack_require__.r(__webpack_exports__);
     const coords = event.target.dataset.coords
     const coordsArray = [parseInt(coords[0]), parseInt(coords[1])]
     pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('fieldClicked', coordsArray)
+  }
+
+  const createDragZone = () => {
+    dragContainer.id = 'drag-container'
+    //1
+    const dragShipBig = document.createElement('div')
+    //2
+    const dragShipLarge = document.createElement('div')
+    //3
+    const dragShipMedium = document.createElement('div')
+    //2
+    const dragShipSmall = document.createElement('div')
+
+    return dragContainer
   }
 
   const createBoards = (boardSize) => {
@@ -557,10 +573,15 @@ __webpack_require__.r(__webpack_exports__);
   }
 
   const init = (boardSize) => {
+    container.id = 'container'
+
+    container.appendChild(createDragZone())
+    container.appendChild(finishMessage)
+    container.appendChild(createBoards(boardSize))
+    container.appendChild(createForm())
+    
     body.appendChild(heading)
-    body.appendChild(finishMessage)
-    body.appendChild(createBoards(boardSize))
-    body.appendChild(createForm())
+    body.appendChild(container)
 
     heading.innerHTML = 'Careship'
 
