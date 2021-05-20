@@ -505,8 +505,8 @@ __webpack_require__.r(__webpack_exports__);
     boardsContainer.appendChild(board1Container)
     boardsContainer.appendChild(board2Container)
 
-    playerName.classList.add('name')
-    computerName.classList.add('name')
+    playerName.id = 'player-name'
+    computerName.id = 'computer-name'
 
     boardsContainer.id = 'board-container'
     board1.id = 'board-1'
