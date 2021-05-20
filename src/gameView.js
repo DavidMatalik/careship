@@ -1,4 +1,5 @@
 import PubSub from 'pubsub-js'
+import uniqid from 'uniqid'
 
 export default (function () {
   const body = document.querySelector('body')
@@ -19,6 +20,10 @@ export default (function () {
   const startButton = document.createElement('button')
   const finishMessage = document.createElement('p')
 
+  let draggedShipSections = null
+  let draggedShipCopy = null
+  let shipVerticalPosition = false
+
   const createBoardFields = (size, board) => {
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
@@ -30,7 +35,94 @@ export default (function () {
     }
   }
 
-  const addFieldListeners = (board) => {
+  // Check if element would wrap (what is unwanted)
+  const checkWrap = (targetEl) => {
+    const coords = targetEl.dataset.coords
+    const coord = shipVerticalPosition
+      ? parseInt(coords[0])
+      : parseInt(coords[1])
+
+    return parseInt(draggedShipSections) + coord > 10 ? true : false
+  }
+
+  // Check if element would be placed on blocked
+  // field. (what is unwanted)
+  const checkBlocked = (targetEl) => {
+    let blocked = false
+    const fields = getFields(targetEl)
+
+    fields.forEach((field) => {
+      if (field.classList.contains('blocked')) {
+        blocked = true
+      }
+    })
+    return blocked
+  }
+
+  // Returns all fields depending on number of global var sections
+  // and if global var elementVerticalPosition is true or false
+  const getFields = (targetEl) => {
+    let fields = []
+    let coords = parseInt(targetEl.dataset.coords)
+
+    const iterator = shipVerticalPosition ? 10 : 1
+
+    for (let i = draggedShipSections; i > 0; i--) {
+      const field = document.querySelector(
+        `[data-coords='${coords < 10 ? 0 : ''}${coords}']`
+      )
+
+      if (field === null) {
+        break
+      }
+
+      fields.push(field)
+      // Prepare selection of field under current field
+      coords += iterator
+    }
+    return fields
+  }
+
+  // Add color to fields  to highlight them
+  // where mouse is and fields on right to mouse
+  const highlightFields = (ev) => {
+    ev.preventDefault()
+
+    if (checkWrap(ev.target) || checkBlocked(ev.target)) {
+      return
+    }
+
+    const fields = getFields(ev.target)
+    fields.forEach((field) => field.classList.add('highlight'))
+  }
+
+  // For change from elementVerticalPosition to horizontal or otherway
+  function whitenAllFields() {
+    const fields = document.querySelectorAll('.field')
+    fields.forEach((field) => {
+      field.classList.remove('highlight')
+    })
+  }
+
+  // Remove color from previously highlighted
+  // fields when mouse goes somewhere else
+  function whitenFields(ev) {
+    ev.preventDefault()
+
+    const fields = getFields(ev.target)
+    fields.forEach((field) => field.classList.remove('highlight'))
+  }
+
+  const addDragDropListeners = (board) => {
+    const fields = Array.from(board.children)
+    fields.forEach((field) => {
+      field.addEventListener('dragleave', whitenFields)
+      field.addEventListener('dragover', highlightFields)
+      field.addEventListener('drop', placeShip)
+    })
+  }
+
+  const addClickListeners = (board) => {
     const fields = Array.from(board.children)
     fields.forEach((field) => {
       field.addEventListener('click', publishCoords)
@@ -43,10 +135,114 @@ export default (function () {
     PubSub.publish('fieldClicked', coordsArray)
   }
 
-  const createDragShips = (name, number) => {
-    for(let i = 0; i < number; i++) {
+  const makeShipDraggable = (ship) => {
+    ship.draggable = 'true'
+    ship.ondragstart = (ev) => {
+      var img = new Image()
+      ev.dataTransfer.setDragImage(img, 0, 0)
+      ev.dataTransfer.setData('text', ev.target.id)
+      ev.dataTransfer.effectAllowed = 'all'
+      draggedShipSections = parseInt(ev.target.dataset.sections)
+
+      draggedShipCopy = ship.cloneNode(true)
+      draggedShipCopy.style.position = 'absolute'
+      draggedShipCopy.style.transformOrigin = 'top left'
+
+      document.body.append(draggedShipCopy)
+
+      document.addEventListener('drag', (ev) => {
+        draggedShipCopy.style.top = ev.pageY + 10 + 'px'
+        draggedShipCopy.style.left = ev.pageX + 'px'
+      })
+
+      document.addEventListener('dragend', () => {
+        draggedShipCopy.remove()
+      })
+    }
+
+    // If ctrl key is pressed and hold
+    // then display draggedElementCopy elementVerticalPosition
+    ship.ondrag = (ev) => {
+      if (ev.ctrlKey) {
+        draggedShipCopy.style.transform = 'rotate(90deg)'
+        if (shipVerticalPosition === false) {
+          shipVerticalPosition = true
+          // Without whitenAllFields for some time elementVerticalPosition
+          // highlights are displayed and horizontal
+          whitenAllFields()
+        }
+      } else {
+        draggedShipCopy.style.transform = ''
+        if (shipVerticalPosition === true) {
+          shipVerticalPosition = false
+          // Without whitenAllFields for some time elementVerticalPosition
+          // highlights are displayed and horizontal
+          whitenAllFields()
+        }
+      }
+    }
+  }
+
+  // Color all appropriate fields after placing on valid spot
+  const placeShip = (ev) => {
+    ev.preventDefault()
+    if (checkWrap(ev.target) || checkBlocked(ev.target)) {
+      return
+    }
+
+    const fields = getFields(ev.target)
+    fields.forEach((field) => {
+      field.classList.add('placed')
+
+      const coords = parseInt(field.dataset.coords)
+      blockFieldsAround(coords)
+
+      // Remove Listeners so that here no Element can be dropped anymore
+      field.removeEventListener('dragover', highlightFields)
+      field.removeEventListener('drop', placeShip)
+    })
+
+    // Remove original element and draggedElementCopy
+    const data = ev.dataTransfer.getData('text')
+    document.getElementById(data).remove()
+    draggedShipCopy.remove()
+  }
+
+  // Block all fields around one specified field
+  const blockFieldsAround = (coordsEl) => {
+    let blockedCoords = []
+
+    // Block fields on bottom side
+    blockedCoords.push(`${coordsEl + 9}`)
+    blockedCoords.push(`${coordsEl + 10}`)
+    blockedCoords.push(`${coordsEl + 11}`)
+
+    // Block fields on top side
+    blockedCoords.push(`${coordsEl - 9}`)
+    blockedCoords.push(`${coordsEl - 10}`)
+    blockedCoords.push(`${coordsEl - 11}`)
+
+    // Block fields on left and right side
+    blockedCoords.push(`${coordsEl - 1}`)
+    blockedCoords.push(`${coordsEl + 1}`)
+
+    blockedCoords.forEach((coords) => {
+      const el = document.querySelector(
+        `[data-coords='${coords < 10 ? 0 : ''}${coords}']`
+      )
+      if (el !== null) {
+        el.classList.add('blocked')
+      }
+    })
+  }
+
+  const createDragShips = (name, amount, sections) => {
+    for (let i = 0; i < amount; i++) {
       const dragShip = document.createElement('div')
+      dragShip.id = uniqid()
+      dragShip.dataset.sections = sections
       dragShip.classList.add(`ship-${name}`)
+      makeShipDraggable(dragShip)
       dragContainer.appendChild(dragShip)
     }
   }
@@ -54,15 +250,18 @@ export default (function () {
   const createDragZone = () => {
     dragContainer.id = 'drag-container'
 
-    createDragShips('big', 1) 
-    createDragShips('large', 2) 
-    createDragShips('medium', 3) 
-    createDragShips('small', 2) 
+    createDragShips('big', 1, 5)
+    createDragShips('large', 2, 4)
+    createDragShips('medium', 3, 3)
+    createDragShips('small', 2, 2)
 
     return dragContainer
   }
 
   const createBoards = (boardSize) => {
+    board1Container.classList.add('board-container')
+    board2Container.classList.add('board-container')
+
     board1Container.appendChild(playerName)
     board2Container.appendChild(computerName)
 
@@ -72,10 +271,10 @@ export default (function () {
     boardsContainer.appendChild(board1Container)
     boardsContainer.appendChild(board2Container)
 
-    playerName.id = 'player-name'
-    computerName.id = 'computer-name'
+    playerName.classList.add('name')
+    computerName.classList.add('name')
 
-    boardsContainer.id = 'board-container'
+    boardsContainer.id = 'boards-container'
     board1.id = 'board-1'
     board2.id = 'board-2'
 
@@ -104,7 +303,7 @@ export default (function () {
       finishMessage.style.display = 'none'
       resetBoard(board1)
       resetBoard(board2)
-      addFieldListeners(board2)
+      addClickListeners(board2)
     }
   }
 
@@ -130,11 +329,15 @@ export default (function () {
     container.appendChild(finishMessage)
     container.appendChild(createBoards(boardSize))
     container.appendChild(createForm())
-    
+
     body.appendChild(heading)
     body.appendChild(container)
 
+    addDragDropListeners(board1)
+
     heading.innerHTML = 'Careship'
+
+    board2Container.style.display = 'none'
 
     finishMessage.id = 'finish-message'
     finishMessage.style.display = 'none'
