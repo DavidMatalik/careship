@@ -206,6 +206,10 @@ export default (function () {
     const data = ev.dataTransfer.getData('text')
     document.getElementById(data).remove()
     draggedShipCopy.remove()
+
+    if (!dragContainer.hasChildNodes()) {
+      form.style.display = 'flex'
+    }
   }
 
   // Block all fields around one specified field
@@ -394,7 +398,7 @@ export default (function () {
     finishMessage.style.display = 'block'
     removeFieldListeners(board2)
     nameInput.value = ''
-    form.style.display = 'block'
+    form.style.display = 'flex'
   }
 
   return { init }

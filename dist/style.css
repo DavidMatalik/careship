@@ -93,11 +93,19 @@ h1 {
 }
 
 form {
-  width: 200px;
-  margin: 30px auto 0 auto;
+  width: 100%;
+  align-self: center;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   display: none;
+}
+
+label,
+input,
+button {
+  width: 200px;
 }
 
 #finish-message {
