@@ -43,16 +43,21 @@ export default (function () {
     PubSub.publish('fieldClicked', coordsArray)
   }
 
+  const createDragShips = (name, number) => {
+    for(let i = 0; i < number; i++) {
+      const dragShip = document.createElement('div')
+      dragShip.classList.add(`ship-${name}`)
+      dragContainer.appendChild(dragShip)
+    }
+  }
+
   const createDragZone = () => {
     dragContainer.id = 'drag-container'
-    //1
-    const dragShipBig = document.createElement('div')
-    //2
-    const dragShipLarge = document.createElement('div')
-    //3
-    const dragShipMedium = document.createElement('div')
-    //2
-    const dragShipSmall = document.createElement('div')
+
+    createDragShips('big', 1) 
+    createDragShips('large', 2) 
+    createDragShips('medium', 3) 
+    createDragShips('small', 2) 
 
     return dragContainer
   }

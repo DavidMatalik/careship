@@ -20,10 +20,32 @@ h1 {
 }
 
 #drag-container{
-  width: 250px;
+  width: 270px;
   height: 550px;
-  background-color: hotpink;
   border: 1px solid black;
+}
+
+.ship-large, .ship-medium, .ship-small, .ship-big {
+  background-color: green;
+  height: 50px; 
+  border: 1px solid black;
+  margin: 10px;
+}
+
+.ship-big {
+  width: 250px;
+}
+
+.ship-large {
+  width: 200px;
+}
+
+.ship-medium {
+  width: 150px;
+}
+
+.ship-small {
+  width: 100px;
 }
 
 #board-container {

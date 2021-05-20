@@ -497,16 +497,41 @@ __webpack_require__.r(__webpack_exports__);
     pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('fieldClicked', coordsArray)
   }
 
+  const createDragShips = (name, number) => {
+    for(let i = 0; i < number; i++) {
+      const dragShip = document.createElement('div')
+      dragShip.classList.add(`ship-${name}`)
+      dragContainer.appendChild(dragShip)
+    }
+  }
+
   const createDragZone = () => {
     dragContainer.id = 'drag-container'
     //1
-    const dragShipBig = document.createElement('div')
-    //2
-    const dragShipLarge = document.createElement('div')
-    //3
-    const dragShipMedium = document.createElement('div')
-    //2
-    const dragShipSmall = document.createElement('div')
+    createDragShips('big', 1) 
+    createDragShips('large', 2) 
+    createDragShips('medium', 3) 
+    createDragShips('small', 2) 
+    // const dragShipBig = document.createElement('div')
+    // dragShipBig.classList.add('ship-big')
+    // dragContainer.appendChild(dragShipBig)
+    // //2
+    // const dragShipLarge = document.createElement('div')
+    // dragShipLarge.classList.add('ship-large')
+    // dragContainer.appendChild(dragShipLarge)
+    // //3
+    // const dragShipMedium = document.createElement('div')
+    // dragShipMedium.classList.add('ship-medium')
+    // dragContainer.appendChild(dragShipMedium)
+    // //2
+    // const dragShipSmall = document.createElement('div')
+    // dragShipSmall.classList.add('ship-small')
+    // dragContainer.appendChild(dragShipSmall)
+
+    
+    
+    
+    
 
     return dragContainer
   }
