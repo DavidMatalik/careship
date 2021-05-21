@@ -9,29 +9,26 @@ export default (() => {
   let player = null
   let computer = null
 
-  const startNewGame = (msg, playerName) => {
+  const prepareBoards = (msg, shipsArray) => {
     playerBoard = gameBoardFactory(10, shipFactory)
     computerBoard = gameBoardFactory(10, shipFactory)
 
-    player = playerFactory(computerBoard, playerName)
-    computer = playerFactory(playerBoard)
-
-    /* At the moment playerBoard is filled manually
-    Implement functionality for letting Player put his ships */
-    playerBoard.placeShip([[2, 2]])
-    playerBoard.placeShip([
-      [4, 4],
-      [4, 5],
-    ])
-
-    computerBoard.placeShip([[2, 2]])
-    computerBoard.placeShip([
-      [4, 4],
-      [4, 5],
-    ])
+    shipsArray.forEach((ship) => {
+      // Format coords for placeShip method
+      const formattedShip = ship.map((coords) => {
+        return [parseInt(coords[0]), parseInt(coords[1])]
+      })
+      playerBoard.placeShip(formattedShip)
+      computerBoard.placeShip(formattedShip)
+    })
 
     PubSub.publish('changedPlayerboard', playerBoard.getBoardStatus())
     PubSub.publish('changedComputerboard', computerBoard.getBoardStatus())
+  }
+
+  const startNewGame = (msg, playerName) => {
+    player = playerFactory(computerBoard, playerName)
+    computer = playerFactory(playerBoard)
   }
 
   const evaluateField = (msg, coords) => {
@@ -49,6 +46,7 @@ export default (() => {
   }
 
   const init = () => {
+    PubSub.subscribe('shipsPlaced', prepareBoards)
     PubSub.subscribe('startClicked', startNewGame)
     PubSub.subscribe('fieldClicked', evaluateField)
   }

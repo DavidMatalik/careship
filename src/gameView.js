@@ -23,6 +23,7 @@ export default (function () {
   let draggedShipSections = null
   let draggedShipCopy = null
   let shipVerticalPosition = false
+  let shipsPlacedArray = []
 
   const createBoardFields = (size, board) => {
     for (let i = 0; i < size; i++) {
@@ -190,12 +191,16 @@ export default (function () {
       return
     }
 
+    let shipCoords = []
+
     const fields = getFields(ev.target)
     fields.forEach((field) => {
       field.classList.add('placed')
 
       const coords = parseInt(field.dataset.coords)
       blockFieldsAround(coords)
+
+      shipCoords.push(field.dataset.coords)
 
       // Remove Listeners so that here no Element can be dropped anymore
       field.removeEventListener('dragover', highlightFields)
@@ -207,8 +212,13 @@ export default (function () {
     document.getElementById(data).remove()
     draggedShipCopy.remove()
 
+    // Save coords of currently placed ship
+    // for later passing to PubSub
+    shipsPlacedArray.push(shipCoords)
+
     if (!dragContainer.hasChildNodes()) {
       form.style.display = 'flex'
+      PubSub.publish('shipsPlaced', shipsPlacedArray)
     }
   }
 
