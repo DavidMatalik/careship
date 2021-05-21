@@ -429,29 +429,26 @@ __webpack_require__.r(__webpack_exports__);
   let player = null
   let computer = null
 
-  const startNewGame = (msg, playerName) => {
+  const prepareBoards = (msg, shipsArray) => {
     playerBoard = (0,_gameboardFactory__WEBPACK_IMPORTED_MODULE_2__.default)(10, _shipFactory__WEBPACK_IMPORTED_MODULE_1__.default)
     computerBoard = (0,_gameboardFactory__WEBPACK_IMPORTED_MODULE_2__.default)(10, _shipFactory__WEBPACK_IMPORTED_MODULE_1__.default)
 
-    player = (0,_playerFactory__WEBPACK_IMPORTED_MODULE_3__.default)(computerBoard, playerName)
-    computer = (0,_playerFactory__WEBPACK_IMPORTED_MODULE_3__.default)(playerBoard)
-
-    /* At the moment playerBoard is filled manually
-    Implement functionality for letting Player put his ships */
-    playerBoard.placeShip([[2, 2]])
-    playerBoard.placeShip([
-      [4, 4],
-      [4, 5],
-    ])
-
-    computerBoard.placeShip([[2, 2]])
-    computerBoard.placeShip([
-      [4, 4],
-      [4, 5],
-    ])
+    shipsArray.forEach((ship) => {
+      // Format coords for placeShip method
+      const formattedShip = ship.map((coords) => {
+        return [parseInt(coords[0]), parseInt(coords[1])]
+      })
+      playerBoard.placeShip(formattedShip)
+      computerBoard.placeShip(formattedShip)
+    })
 
     pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('changedPlayerboard', playerBoard.getBoardStatus())
     pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('changedComputerboard', computerBoard.getBoardStatus())
+  }
+
+  const startNewGame = (msg, playerName) => {
+    player = (0,_playerFactory__WEBPACK_IMPORTED_MODULE_3__.default)(computerBoard, playerName)
+    computer = (0,_playerFactory__WEBPACK_IMPORTED_MODULE_3__.default)(playerBoard)
   }
 
   const evaluateField = (msg, coords) => {
@@ -469,6 +466,7 @@ __webpack_require__.r(__webpack_exports__);
   }
 
   const init = () => {
+    pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().subscribe('shipsPlaced', prepareBoards)
     pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().subscribe('startClicked', startNewGame)
     pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().subscribe('fieldClicked', evaluateField)
   }
@@ -515,10 +513,12 @@ __webpack_require__.r(__webpack_exports__);
   const nameInput = document.createElement('input')
   const startButton = document.createElement('button')
   const finishMessage = document.createElement('p')
+  const playAgainButton = document.createElement('button')
 
   let draggedShipSections = null
   let draggedShipCopy = null
   let shipVerticalPosition = false
+  let shipsPlacedArray = []
 
   const createBoardFields = (size, board) => {
     for (let i = 0; i < size; i++) {
@@ -618,6 +618,15 @@ __webpack_require__.r(__webpack_exports__);
     })
   }
 
+  const removeDragDropListeners = (board) => {
+    const fields = Array.from(board.children)
+    fields.forEach((field) => {
+      field.removeEventListener('dragleave', whitenFields)
+      field.removeEventListener('dragover', highlightFields)
+      field.removeEventListener('drop', placeShip)
+    })
+  }
+
   const addClickListeners = (board) => {
     const fields = Array.from(board.children)
     fields.forEach((field) => {
@@ -686,12 +695,17 @@ __webpack_require__.r(__webpack_exports__);
       return
     }
 
+    let shipCoords = []
+
     const fields = getFields(ev.target)
+
     fields.forEach((field) => {
       field.classList.add('placed')
 
       const coords = parseInt(field.dataset.coords)
       blockFieldsAround(coords)
+
+      shipCoords.push(field.dataset.coords)
 
       // Remove Listeners so that here no Element can be dropped anymore
       field.removeEventListener('dragover', highlightFields)
@@ -703,8 +717,16 @@ __webpack_require__.r(__webpack_exports__);
     document.getElementById(data).remove()
     draggedShipCopy.remove()
 
+    // Save coords of currently placed ship
+    // for later passing to PubSub
+    shipsPlacedArray.push(shipCoords)
+
+    // If all ships are dragged and dropped
     if (!dragContainer.hasChildNodes()) {
       form.style.display = 'flex'
+      pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('shipsPlaced', shipsPlacedArray)
+      removeDragDropListeners(board1)
+      dragContainer.style.display = 'none'
     }
   }
 
@@ -788,6 +810,7 @@ __webpack_require__.r(__webpack_exports__);
     const fields = Array.from(board.children)
     fields.forEach((field) => {
       field.innerHTML = ''
+      field.classList.remove('highlight', 'blocked', 'placed')
     })
   }
 
@@ -798,11 +821,9 @@ __webpack_require__.r(__webpack_exports__);
       event.preventDefault()
       pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('startClicked', nameInput.value)
       form.style.display = 'none'
+      board2Container.style.display = 'block'
       playerName.innerHTML = `${nameInput.value}'s board`
       computerName.innerHTML = `Computer's board`
-      finishMessage.style.display = 'none'
-      resetBoard(board1)
-      resetBoard(board2)
       addClickListeners(board2)
     }
   }
@@ -822,13 +843,30 @@ __webpack_require__.r(__webpack_exports__);
     return form
   }
 
+  const renderPlacingShips = () => {
+    // reset necessary stuff
+    resetBoard(board1)
+    addDragDropListeners(board1)
+    resetBoard(board2)
+    playerName.innerHTML = ''
+    shipsPlacedArray = []
+
+    // Hide and show necessary stuff
+    dragContainer.style.display = 'block'
+    container.insertBefore(createDragZone(), container.firstChild)
+    board2Container.style.display = 'none'
+    finishMessage.style.display = 'none'
+    playAgainButton.style.display = 'none'
+  }
+
   const init = (boardSize) => {
     container.id = 'container'
 
     container.appendChild(createDragZone())
-    container.appendChild(finishMessage)
     container.appendChild(createBoards(boardSize))
     container.appendChild(createForm())
+    container.appendChild(finishMessage)
+    container.appendChild(playAgainButton)
 
     body.appendChild(heading)
     body.appendChild(container)
@@ -841,6 +879,10 @@ __webpack_require__.r(__webpack_exports__);
 
     finishMessage.id = 'finish-message'
     finishMessage.style.display = 'none'
+
+    playAgainButton.addEventListener('click', renderPlacingShips)
+    playAgainButton.innerHTML = 'Play Again!'
+    playAgainButton.style.display = 'none'
 
     pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().subscribe('changedPlayerboard', updatePlayerboard)
     pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().subscribe('changedComputerboard', updateComputerboard)
@@ -894,7 +936,7 @@ __webpack_require__.r(__webpack_exports__);
     finishMessage.style.display = 'block'
     removeFieldListeners(board2)
     nameInput.value = ''
-    form.style.display = 'flex'
+    playAgainButton.style.display = 'inline-block'
   }
 
   return { init }
