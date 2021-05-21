@@ -232,6 +232,7 @@ export default (function () {
       form.style.display = 'flex'
       PubSub.publish('shipsPlaced', shipsPlacedArray)
       removeDragDropListeners(board1)
+      dragContainer.style.display = 'none'
     }
   }
 
@@ -357,6 +358,7 @@ export default (function () {
     shipsPlacedArray = []
 
     // Hide and show necessary stuff
+    dragContainer.style.display = 'block'
     container.insertBefore(createDragZone(), container.firstChild)
     board2Container.style.display = 'none'
     finishMessage.style.display = 'none'
