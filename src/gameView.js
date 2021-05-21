@@ -302,6 +302,7 @@ export default (function () {
       event.preventDefault()
       PubSub.publish('startClicked', nameInput.value)
       form.style.display = 'none'
+      board2Container.style.display = 'block'
       playerName.innerHTML = `${nameInput.value}'s board`
       computerName.innerHTML = `Computer's board`
       finishMessage.style.display = 'none'
