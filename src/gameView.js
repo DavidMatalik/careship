@@ -19,6 +19,7 @@ export default (function () {
   const nameInput = document.createElement('input')
   const startButton = document.createElement('button')
   const finishMessage = document.createElement('p')
+  const playAgainButton = document.createElement('button')
 
   let draggedShipSections = null
   let draggedShipCopy = null
@@ -123,6 +124,15 @@ export default (function () {
     })
   }
 
+  const removeDragDropListeners = (board) => {
+    const fields = Array.from(board.children)
+    fields.forEach((field) => {
+      field.removeEventListener('dragleave', whitenFields)
+      field.removeEventListener('dragover', highlightFields)
+      field.removeEventListener('drop', placeShip)
+    })
+  }
+
   const addClickListeners = (board) => {
     const fields = Array.from(board.children)
     fields.forEach((field) => {
@@ -194,6 +204,7 @@ export default (function () {
     let shipCoords = []
 
     const fields = getFields(ev.target)
+
     fields.forEach((field) => {
       field.classList.add('placed')
 
@@ -216,9 +227,11 @@ export default (function () {
     // for later passing to PubSub
     shipsPlacedArray.push(shipCoords)
 
+    // If all ships are dragged and dropped
     if (!dragContainer.hasChildNodes()) {
       form.style.display = 'flex'
       PubSub.publish('shipsPlaced', shipsPlacedArray)
+      removeDragDropListeners(board1)
     }
   }
 
@@ -302,6 +315,7 @@ export default (function () {
     const fields = Array.from(board.children)
     fields.forEach((field) => {
       field.innerHTML = ''
+      field.classList.remove('highlight', 'blocked', 'placed')
     })
   }
 
@@ -315,9 +329,6 @@ export default (function () {
       board2Container.style.display = 'block'
       playerName.innerHTML = `${nameInput.value}'s board`
       computerName.innerHTML = `Computer's board`
-      finishMessage.style.display = 'none'
-      resetBoard(board1)
-      resetBoard(board2)
       addClickListeners(board2)
     }
   }
@@ -337,13 +348,29 @@ export default (function () {
     return form
   }
 
+  const renderPlacingShips = () => {
+    // reset necessary stuff
+    resetBoard(board1)
+    addDragDropListeners(board1)
+    resetBoard(board2)
+    playerName.innerHTML = ''
+    shipsPlacedArray = []
+
+    // Hide and show necessary stuff
+    container.insertBefore(createDragZone(), container.firstChild)
+    board2Container.style.display = 'none'
+    finishMessage.style.display = 'none'
+    playAgainButton.style.display = 'none'
+  }
+
   const init = (boardSize) => {
     container.id = 'container'
 
     container.appendChild(createDragZone())
-    container.appendChild(finishMessage)
     container.appendChild(createBoards(boardSize))
     container.appendChild(createForm())
+    container.appendChild(finishMessage)
+    container.appendChild(playAgainButton)
 
     body.appendChild(heading)
     body.appendChild(container)
@@ -356,6 +383,10 @@ export default (function () {
 
     finishMessage.id = 'finish-message'
     finishMessage.style.display = 'none'
+
+    playAgainButton.addEventListener('click', renderPlacingShips)
+    playAgainButton.innerHTML = 'Play Again!'
+    playAgainButton.style.display = 'none'
 
     PubSub.subscribe('changedPlayerboard', updatePlayerboard)
     PubSub.subscribe('changedComputerboard', updateComputerboard)
@@ -409,7 +440,7 @@ export default (function () {
     finishMessage.style.display = 'block'
     removeFieldListeners(board2)
     nameInput.value = ''
-    form.style.display = 'flex'
+    playAgainButton.style.display = 'inline-block'
   }
 
   return { init }
