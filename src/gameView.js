@@ -18,6 +18,7 @@ export default (function () {
   const nameLabel = document.createElement('label')
   const nameInput = document.createElement('input')
   const startButton = document.createElement('button')
+  const finishContainer = document.createElement('div')
   const finishMessage = document.createElement('p')
   const playAgainButton = document.createElement('button')
   const infoRotation = document.createElement('div')
@@ -387,8 +388,7 @@ export default (function () {
     dragContainer.style.display = 'block'
     container.insertBefore(createDragZone(), container.firstChild)
     board2Container.style.display = 'none'
-    finishMessage.style.display = 'none'
-    playAgainButton.style.display = 'none'
+    finishContainer.style.display = 'none'
   }
 
   const init = (boardSize) => {
@@ -397,11 +397,13 @@ export default (function () {
     container.appendChild(createDragZone())
     container.appendChild(createBoards(boardSize))
     container.appendChild(createForm())
-    container.appendChild(finishMessage)
-    container.appendChild(playAgainButton)
+    container.appendChild(finishContainer)
 
     body.appendChild(heading)
     body.appendChild(container)
+
+    finishContainer.appendChild(finishMessage)
+    finishContainer.appendChild(playAgainButton)
 
     addDragDropListeners(board1)
 
@@ -409,12 +411,12 @@ export default (function () {
 
     board2Container.style.display = 'none'
 
+    finishContainer.id = 'finish-container'
     finishMessage.id = 'finish-message'
-    finishMessage.style.display = 'none'
+    finishContainer.style.display = 'none'
 
     playAgainButton.addEventListener('click', renderPlacingShips)
     playAgainButton.innerHTML = 'Play Again!'
-    playAgainButton.style.display = 'none'
 
     PubSub.subscribe('changedPlayerboard', updatePlayerboard)
     PubSub.subscribe('changedComputerboard', updateComputerboard)
@@ -465,10 +467,9 @@ export default (function () {
 
   const renderFinishDisplay = (msg, name) => {
     finishMessage.innerHTML = `${name} has supplied all ships!`
-    finishMessage.style.display = 'block'
+    finishContainer.style.display = 'block'
     removeFieldListeners(board2)
     nameInput.value = ''
-    playAgainButton.style.display = 'inline-block'
   }
 
   return { init }

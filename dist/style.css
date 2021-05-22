@@ -118,11 +118,13 @@ label,
 input,
 button {
   width: 200px;
+  height: 40px;
+  font-size: 20px;
 }
 
-#finish-message {
+#finish-container {
   width: 300px;
-  height: 100px;
+  height: 120px;
   padding: 20px;
 
   position: absolute;
@@ -130,9 +132,12 @@ button {
   left: 50%;
 
   margin: -70px 0 0 -170px;
-  background-color: red;
   text-align: center;
   font-size: 40px;
+
+  background-color: #feffde;
+  border: 3px solid #91c788;
+  border-radius: 10px;
 }
 
 .highlight {
