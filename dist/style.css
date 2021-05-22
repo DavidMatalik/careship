@@ -52,6 +52,18 @@ h1 {
   width: 100px;
 }
 
+#info-rotation {
+  width: 200px;
+  height: 100px;
+  font-size: 200%;
+  position: absolute;
+  z-index: 1000;
+  text-align: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+}
+
 #boards-container {
   max-width: 1100px;
   display: flex;

@@ -20,6 +20,7 @@ export default (function () {
   const startButton = document.createElement('button')
   const finishMessage = document.createElement('p')
   const playAgainButton = document.createElement('button')
+  const infoRotation = document.createElement('div')
 
   let draggedShipSections = null
   let draggedShipCopy = null
@@ -149,6 +150,10 @@ export default (function () {
   const makeShipDraggable = (ship) => {
     ship.draggable = 'true'
     ship.ondragstart = (ev) => {
+      infoRotation.id = 'info-rotation'
+      infoRotation.innerHTML = `Press and hold ctrl for vertical placing`
+      document.body.appendChild(infoRotation)
+
       var img = new Image()
       ev.dataTransfer.setDragImage(img, 0, 0)
       ev.dataTransfer.setData('text', ev.target.id)
@@ -164,10 +169,18 @@ export default (function () {
       document.addEventListener('drag', (ev) => {
         draggedShipCopy.style.top = ev.pageY + 10 + 'px'
         draggedShipCopy.style.left = ev.pageX + 'px'
+
+        infoRotation.style.top = ev.pageY + 10 + 'px'
+        infoRotation.style.left = ev.pageX - infoRotation.offsetWidth / 2 + 'px'
+
+        setTimeout(() => {
+          infoRotation.style.display = 'none'
+        }, 2500)
       })
 
       document.addEventListener('dragend', () => {
         draggedShipCopy.remove()
+        infoRotation.remove()
       })
     }
 
@@ -237,22 +250,35 @@ export default (function () {
   }
 
   // Block all fields around one specified field
-  const blockFieldsAround = (coordsEl) => {
+  function blockFieldsAround(coordsEl) {
     let blockedCoords = []
 
+    /* For avoiding blocks on the opposite side
+  the modulo tests are implemented */
+
     // Block fields on bottom side
-    blockedCoords.push(`${coordsEl + 9}`)
+    if (coordsEl % 10 !== 0) {
+      blockedCoords.push(`${coordsEl + 9}`)
+    }
     blockedCoords.push(`${coordsEl + 10}`)
-    blockedCoords.push(`${coordsEl + 11}`)
+    if (coordsEl % 10 !== 9) {
+      blockedCoords.push(`${coordsEl + 11}`)
+    }
 
     // Block fields on top side
-    blockedCoords.push(`${coordsEl - 9}`)
+    if (coordsEl % 10 !== 9) {
+      blockedCoords.push(`${coordsEl - 9}`)
+    }
     blockedCoords.push(`${coordsEl - 10}`)
-    blockedCoords.push(`${coordsEl - 11}`)
+    if (coordsEl % 10 !== 0) {
+      blockedCoords.push(`${coordsEl - 11}`)
+    }
 
     // Block fields on left and right side
-    blockedCoords.push(`${coordsEl - 1}`)
-    blockedCoords.push(`${coordsEl + 1}`)
+    if ((coordsEl % 10 !== 0) & (coordsEl % 10 !== 9)) {
+      blockedCoords.push(`${coordsEl - 1}`)
+      blockedCoords.push(`${coordsEl + 1}`)
+    }
 
     blockedCoords.forEach((coords) => {
       const el = document.querySelector(
