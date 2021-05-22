@@ -20,10 +20,11 @@ h1 {
 }
 
 #drag-container {
-  width: 270px;
-  height: 550px;
+  width: 280px;
+  height: 570px;
   border: 1px solid black;
   margin: 10px;
+  padding-top: 10px;
 }
 
 .ship-large,
@@ -33,7 +34,7 @@ h1 {
   background-color: green;
   height: 50px;
   border: 1px solid black;
-  margin: 10px;
+  margin: 15px;
 }
 
 .ship-big {
@@ -74,6 +75,7 @@ h1 {
 
 .name {
   background-color: greenyellow;
+  color: greenyellow;
   text-align: center;
   padding: 25px;
   font-size: 25px;

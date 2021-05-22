@@ -327,6 +327,8 @@ export default (function () {
     boardsContainer.appendChild(board2Container)
 
     playerName.classList.add('name')
+    playerName.innerHTML = 'Placeholder'
+    playerName.style.color = 'greenyellow'
     computerName.classList.add('name')
 
     boardsContainer.id = 'boards-container'
@@ -356,6 +358,7 @@ export default (function () {
       form.style.display = 'none'
       board2Container.style.display = 'block'
       playerName.innerHTML = `${nameInput.value}'s board`
+      playerName.style.color = 'black'
       computerName.innerHTML = `Computer's board`
       addClickListeners(board2)
     }
@@ -381,7 +384,8 @@ export default (function () {
     resetBoard(board1)
     addDragDropListeners(board1)
     resetBoard(board2)
-    playerName.innerHTML = ''
+    playerName.innerHTML = 'Placeholder'
+    playerName.style.color = 'greenyellow'
     shipsPlacedArray = []
 
     // Hide and show necessary stuff
