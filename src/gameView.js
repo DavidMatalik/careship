@@ -433,14 +433,18 @@ export default (function () {
     for (let i = 0; i < boardDetails.length; i++) {
       for (let j = 0; j < boardDetails.length; j++) {
         const field = board1.querySelector(`[data-coords='${i}${j}']`)
-        if (typeof boardDetails[i][j] === 'object') {
+        /* if (typeof boardDetails[i][j] === 'object') {
           field.innerHTML = 'ship'
-        }
+        } */
         if (boardDetails[i][j] === false) {
           field.innerHTML = 'no!'
         }
         if (boardDetails[i][j] === true) {
-          field.innerHTML = 'yes!'
+          if (!field.hasChildNodes()) {
+            const handHeart = document.createElement('i')
+            handHeart.classList.add('fas', 'fa-hand-holding-heart', 'fa-2x')
+            field.appendChild(handHeart)
+          }
         }
       }
     }
@@ -456,7 +460,11 @@ export default (function () {
           field.innerHTML = 'no!'
         }
         if (boardDetails[i][j] === true) {
-          field.innerHTML = 'yes'
+          if (!field.hasChildNodes()) {
+            const handHeart = document.createElement('i')
+            handHeart.classList.add('fas', 'fa-hand-holding-heart', 'fa-2x')
+            field.appendChild(handHeart)
+          }
         }
       }
     }
