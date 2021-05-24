@@ -143,6 +143,15 @@ export default (function () {
   }
 
   const publishCoords = (event) => {
+    console.log(event.target)
+    // If clicked on already clicked field
+    if (
+      !event.target.classList.contains('field') ||
+      event.target.hasChildNodes()
+    ) {
+      return
+    }
+
     const coords = event.target.dataset.coords
     const coordsArray = [parseInt(coords[0]), parseInt(coords[1])]
     PubSub.publish('fieldClicked', coordsArray)
