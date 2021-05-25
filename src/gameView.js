@@ -438,21 +438,15 @@ export default (function () {
 
   const updatePlayerboard = (msg, boardDetails) => {
     // Hier kommt ein 2D-Array rein mit undefined/object/true/false
-    // Erstmal mit "o" "t" "f" rendern - später besser rendern
     for (let i = 0; i < boardDetails.length; i++) {
       for (let j = 0; j < boardDetails.length; j++) {
         const field = board1.querySelector(`[data-coords='${i}${j}']`)
-        /* if (typeof boardDetails[i][j] === 'object') {
-          field.innerHTML = 'ship'
-        } */
-        if (boardDetails[i][j] === false) {
-          field.innerHTML = 'no!'
-        }
-        if (boardDetails[i][j] === true) {
-          if (!field.hasChildNodes()) {
-            const handHeart = document.createElement('i')
-            handHeart.classList.add('fas', 'fa-hand-holding-heart', 'fa-2x')
-            field.appendChild(handHeart)
+        if (!field.hasChildNodes()) {
+          if (boardDetails[i][j] === false) {
+            addIcon(field, 'fa-fish', 'blue')
+          }
+          if (boardDetails[i][j] === true) {
+            addIcon(field, 'fa-hand-holding-heart', 'red')
           }
         }
       }
@@ -461,22 +455,26 @@ export default (function () {
 
   const updateComputerboard = (msg, boardDetails) => {
     // Hier kommt ein 2D-Array rein mit undefined/object/true/false
-    // Erstmal mit "o" "t" "f" rendern - später besser rendern
     for (let i = 0; i < boardDetails.length; i++) {
       for (let j = 0; j < boardDetails.length; j++) {
         const field = board2.querySelector(`[data-coords='${i}${j}']`)
-        if (boardDetails[i][j] === false) {
-          field.innerHTML = 'no!'
-        }
-        if (boardDetails[i][j] === true) {
-          if (!field.hasChildNodes()) {
-            const handHeart = document.createElement('i')
-            handHeart.classList.add('fas', 'fa-hand-holding-heart', 'fa-2x')
-            field.appendChild(handHeart)
+        if (!field.hasChildNodes()) {
+          if (boardDetails[i][j] === false) {
+            addIcon(field, 'fa-fish', 'blue')
+          }
+          if (boardDetails[i][j] === true) {
+            addIcon(field, 'fa-hand-holding-heart', 'red')
           }
         }
       }
     }
+  }
+
+  const addIcon = (element, iconClass, iconColor) => {
+    const icon = document.createElement('i')
+    icon.classList.add('fas', `${iconClass}`, 'fa-2x')
+    element.appendChild(icon)
+    element.style.color = `${iconColor}`
   }
 
   const removeFieldListeners = (board) => {
