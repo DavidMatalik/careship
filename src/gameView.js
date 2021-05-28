@@ -5,6 +5,7 @@ export default (function () {
   const body = document.querySelector('body')
 
   const heading = document.createElement('h1')
+  const introduction = document.createElement('section')
   const container = document.createElement('div')
   const dragContainer = document.createElement('div')
   const boardsContainer = document.createElement('div')
@@ -256,6 +257,7 @@ export default (function () {
       PubSub.publish('shipsPlaced', shipsPlacedArray)
       removeDragDropListeners(board1)
       dragContainer.style.display = 'none'
+      introduction.style.display = 'none'
     }
   }
 
@@ -413,6 +415,7 @@ export default (function () {
     container.appendChild(finishContainer)
 
     body.appendChild(heading)
+    body.appendChild(introduction)
     body.appendChild(container)
 
     finishContainer.appendChild(finishMessage)
@@ -421,6 +424,8 @@ export default (function () {
     addDragDropListeners(board1)
 
     heading.innerHTML = 'Careship'
+
+    introduction.innerHTML = 'This game is about supplying ships of your friend with gifts. Then your friend for sure feels better. Start by placing your ships.'
 
     board2Container.style.display = 'none'
 
