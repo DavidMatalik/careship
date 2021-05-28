@@ -10,6 +10,12 @@ h1 {
   font-weight: 700;
 }
 
+section {
+  text-align: center;
+  padding: 20px;
+  font-size: 20px;
+}
+
 #container {
   display: flex;
   justify-content: space-around;
