@@ -339,7 +339,6 @@ export default (function () {
 
     playerName.classList.add('name')
     playerName.innerHTML = 'Placeholder'
-    playerName.style.color = 'greenyellow'
     computerName.classList.add('name')
 
     boardsContainer.id = 'boards-container'
@@ -369,8 +368,9 @@ export default (function () {
       form.style.display = 'none'
       board2Container.style.display = 'block'
       playerName.innerHTML = `${nameInput.value}'s board`
-      playerName.style.color = 'black'
+      playerName.style.color = '#6155a6'
       computerName.innerHTML = `Computer's board`
+      computerName.style.color = '#6155a6'
       addClickListeners(board2)
     }
   }
@@ -396,7 +396,7 @@ export default (function () {
     addDragDropListeners(board1)
     resetBoard(board2)
     playerName.innerHTML = 'Placeholder'
-    playerName.style.color = 'greenyellow'
+    playerName.style.color = '#ffabe1'
     shipsPlacedArray = []
 
     // Hide and show necessary stuff
@@ -448,10 +448,10 @@ export default (function () {
         const field = board1.querySelector(`[data-coords='${i}${j}']`)
         if (!field.hasChildNodes()) {
           if (boardDetails[i][j] === false) {
-            addIcon(field, 'fa-fish', 'blue')
+            addIcon(field, 'fa-fish', '#a685e2')
           }
           if (boardDetails[i][j] === true) {
-            addIcon(field, 'fa-hand-holding-heart', 'red')
+            addIcon(field, 'fa-hand-holding-heart', '#ffabe1')
           }
         }
       }
@@ -465,10 +465,10 @@ export default (function () {
         const field = board2.querySelector(`[data-coords='${i}${j}']`)
         if (!field.hasChildNodes()) {
           if (boardDetails[i][j] === false) {
-            addIcon(field, 'fa-fish', 'blue')
+            addIcon(field, 'fa-fish', '#a685e2')
           }
           if (boardDetails[i][j] === true) {
-            addIcon(field, 'fa-hand-holding-heart', 'red')
+            addIcon(field, 'fa-hand-holding-heart', '#ffabe1')
           }
         }
       }
