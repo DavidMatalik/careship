@@ -1,19 +1,23 @@
 body {
   position: relative;
+  background-color: #ffe6e652;
 }
 
 h1 {
-  background-color: pink;
+  background-color: #a685e2;
   text-align: center;
   padding: 20px;
-  font-size: 30px;
+  font-size: 50px;
   font-weight: 700;
+  color: white;
 }
 
 section {
   text-align: center;
   padding: 20px;
-  font-size: 20px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #6155a6;
 }
 
 #container {
@@ -28,7 +32,7 @@ section {
 #drag-container {
   width: 280px;
   height: 570px;
-  border: 1px solid black;
+  border: 5px solid #a685e2;
   margin: 10px;
   padding-top: 10px;
 }
@@ -37,7 +41,7 @@ section {
 .ship-medium,
 .ship-small,
 .ship-big {
-  background-color: green;
+  background-color: #a685e2;
   height: 50px;
   border: 1px solid black;
   margin: 15px;
@@ -80,13 +84,13 @@ section {
 }
 
 .name {
-  background-color: greenyellow;
-  color: greenyellow;
+  background-color: #ffabe1;
+  color: #ffabe1;
   text-align: center;
   padding: 25px;
   font-size: 25px;
   font-weight: 600;
-  border: 1px solid black;
+  border: 1px solid #6155a6;
   width: 450px;
 }
 
@@ -101,17 +105,24 @@ section {
   display: grid;
   grid-template-columns: repeat(10, 50px);
   grid-template-rows: repeat(10, 50px);
-  border-top: 1px solid black;
-  border-left: 1px solid black;
+  border-top: 1px solid #6155a6;
+  border-left: 1px solid #6155a6;
+  background-color: white;
 }
 
 .field {
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+  border-right: 1px solid #6155a6;
+  border-bottom: 1px solid #6155a6;
   width: 50px;
   height: 40px;
   text-align: center;
   padding-top: 10px;
+}
+
+/* Border for fish and heart icons */
+path {
+  stroke: black;
+  stroke-width: 25px;
 }
 
 form {
@@ -136,24 +147,21 @@ button {
   width: 300px;
   height: 120px;
   padding: 20px;
-
   position: absolute;
   top: 50%;
   left: 50%;
-
   margin: -70px 0 0 -170px;
   text-align: center;
   font-size: 40px;
-
-  background-color: #feffde;
-  border: 3px solid #91c788;
+  background-color: #ffe6e6;
+  border: 5px solid #a685e2;
   border-radius: 10px;
 }
 
 .highlight {
-  background-color: rgba(0, 128, 0, 0.253);
+  background-color: #6155a631;
 }
 
 .placed {
-  background-color: green;
+  background-color: #a685e2;
 }
