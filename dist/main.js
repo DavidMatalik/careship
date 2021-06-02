@@ -5228,6 +5228,7 @@ __webpack_require__.r(__webpack_exports__);
       pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('shipsPlaced', shipsPlacedArray)
       removeDragDropListeners(board1)
       dragContainer.style.display = 'none'
+      introduction.style.display = 'none'
     }
   }
 
@@ -5395,7 +5396,8 @@ __webpack_require__.r(__webpack_exports__);
 
     heading.innerHTML = 'Careship'
 
-    introduction.innerHTML = 'This game is about supplying ships of your friend with gifts. Then your friend for sure feels better. Start by placing your ships.'
+    introduction.innerHTML =
+      'This game is about supplying ships of your friend with gifts. Then your friend for sure feels better. Start by placing your ships.'
 
     board2Container.style.display = 'none'
 
@@ -5433,6 +5435,13 @@ __webpack_require__.r(__webpack_exports__);
     for (let i = 0; i < boardDetails.length; i++) {
       for (let j = 0; j < boardDetails.length; j++) {
         const field = board2.querySelector(`[data-coords='${i}${j}']`)
+
+        if (boardDetails[i][j] === 'shipSupplied') {
+          field.innerHTML = ''
+          field.classList.add('placed')
+          addIcon(field, 'fa-hand-holding-heart', '#ffabe1')
+        }
+
         if (!field.hasChildNodes()) {
           if (boardDetails[i][j] === false) {
             addIcon(field, 'fa-fish', '#a685e2')
@@ -5492,7 +5501,9 @@ function gameBoardFactory(size, shipFactory) {
   // Create a ship and put it on given coordinates
   const placeShip = (coords) => {
     const shipLen = coords.length
-    const index = ships.push(shipFactory(shipLen)) - 1
+
+    // Save ship with its coordinates (Needed for checking areAllSupplied)
+    const index = ships.push([shipFactory(shipLen), coords]) - 1
 
     coords.forEach((coord) => {
       boardStatus[coord[0]][coord[1]] = ships[index]
@@ -5504,7 +5515,31 @@ function gameBoardFactory(size, shipFactory) {
 
     // Check if fieldValue has ship
     if (typeof fieldValue === 'object') {
-      fieldValue.sendGift()
+      fieldValue[0].sendGift()
+      
+      // All fields of this ship are already supplied?
+      if(fieldValue[0].isSupplied()) { 
+        
+        // Find index of ship in ships using coordPair
+        const ind = ships.findIndex(ship => {
+          // Check if coordPair is in current ship
+          const found = ship[1].find(coord => {
+            if (JSON.stringify(coord) === JSON.stringify(coordPair)){
+              return true
+            }
+          })
+          // If coordPair was found return true
+          return found ? true : false
+        })
+
+        // Set all found coords on 'shipSupplied' in boardStatus
+        const suppliedShipCoords = ships[ind][1]
+        suppliedShipCoords.forEach(coords => {
+          boardStatus[coords[0]][coords[1]] = 'shipSupplied'
+        })
+        return
+      }
+
       fieldValue = true
     }
 
@@ -5519,7 +5554,7 @@ function gameBoardFactory(size, shipFactory) {
   const areAllSupplied = () => {
     // If you find a ship which isn't supplied return false
     for (let i = 0; i < ships.length; i++) {
-      if (!ships[i].isSupplied()) {
+      if (!ships[i][0].isSupplied()) {
         return false
       }
     }

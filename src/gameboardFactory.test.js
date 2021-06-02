@@ -35,7 +35,7 @@ test('placeShip method changes boardStatus for small ship', () => {
 
   gameBoard.placeShip([[1, 1]])
   // expectedArray[1][1] = fakeShip
-  fakeArr[1][1] = fakeShip
+  fakeArr[1][1] = [fakeShip, [[1, 1]]]
 
   // expect(gameBoard.getBoardStatus()).toStrictEqual(expectedArray)
   expect(gameBoard.getBoardStatus()).toStrictEqual(fakeArr)
@@ -55,9 +55,21 @@ test('placeShip method changes boardStatus for medium ship', () => {
     [1, 3],
   ])
 
-  fakeArr[1][1] = fakeShip
-  fakeArr[1][2] = fakeShip
-  fakeArr[1][3] = fakeShip
+  fakeArr[1][1] = [fakeShip, [
+    [1, 1],
+    [1, 2],
+    [1, 3],
+  ] ]
+  fakeArr[1][2] = [fakeShip, [
+    [1, 1],
+    [1, 2],
+    [1, 3],
+  ] ]
+  fakeArr[1][3] = [fakeShip, [
+    [1, 1],
+    [1, 2],
+    [1, 3],
+  ] ]
 
   expect(fakeShipFactory).toBeCalledWith(3)
   expect(gameBoard.getBoardStatus()).toStrictEqual(fakeArr)
@@ -67,7 +79,7 @@ test('receiveGift tracks succesful gift', () => {
   const fakeShipFactory = (num) => {
     return {
       sendGift: () => {},
-      isSupplied: '',
+      isSupplied: () => false,
     }
   }
   const gameBoard = gameboardFactory(10, fakeShipFactory)
@@ -89,10 +101,33 @@ test('receiveGift tracks missed gift', () => {
   const fakeShip = fakeShipFactory()
   const gameBoard = gameboardFactory(10, fakeShipFactory)
 
-  fakeArr[1][1] = fakeShip
+  fakeArr[1][1] = [fakeShip, [[1, 1]]]
   fakeArr[0][1] = false
   gameBoard.placeShip([[1, 1]])
   gameBoard.receiveGift([0, 1])
+
+  expect(gameBoard.getBoardStatus()).toStrictEqual(fakeArr)
+})
+
+test('receiveGift updates boardStatus for completely supplied ship', () => {
+  const isSuppliedMock = jest.fn()
+  const fakeShipFactory = (num) => {
+    return {
+      sendGift: () => {},
+      isSupplied: isSuppliedMock,
+    }
+  }
+  const gameBoard = gameboardFactory(10, fakeShipFactory)
+
+  isSuppliedMock.mockReturnValueOnce(false).mockReturnValueOnce(true)
+
+  fakeArr[1][1] = 'shipSupplied'
+  fakeArr[1][2] = 'shipSupplied'
+
+  gameBoard.placeShip([[1, 1], [1, 2]])
+
+  gameBoard.receiveGift([1, 1])
+  gameBoard.receiveGift([1, 2])
 
   expect(gameBoard.getBoardStatus()).toStrictEqual(fakeArr)
 })
@@ -105,7 +140,7 @@ test('sendGift method of the correct ship gets called', () => {
       sendGift: () => {
         counter++
       },
-      isSupplied: '',
+      isSupplied: () => false,
     }
   }
   const gameBoard = gameboardFactory(10, fakeShipFactory)

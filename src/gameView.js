@@ -463,6 +463,13 @@ export default (function () {
     for (let i = 0; i < boardDetails.length; i++) {
       for (let j = 0; j < boardDetails.length; j++) {
         const field = board2.querySelector(`[data-coords='${i}${j}']`)
+
+        if (boardDetails[i][j] === 'shipSupplied') {
+          field.innerHTML = ''
+          field.classList.add('placed')
+          addIcon(field, 'fa-hand-holding-heart', '#ffabe1')
+        }
+
         if (!field.hasChildNodes()) {
           if (boardDetails[i][j] === false) {
             addIcon(field, 'fa-fish', '#a685e2')
