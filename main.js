@@ -5396,8 +5396,7 @@ __webpack_require__.r(__webpack_exports__);
 
     heading.innerHTML = 'Careship'
 
-    introduction.innerHTML =
-      'This game is about supplying ships of your friend with gifts. Then your friend for sure feels better. Start by placing your ships.'
+    introduction.innerHTML = 'This game is about supplying ships of your friend with gifts. Then your friend for sure feels better. Start by placing your ships.'
 
     board2Container.style.display = 'none'
 
@@ -5516,10 +5515,10 @@ function gameBoardFactory(size, shipFactory) {
     // Check if fieldValue has ship
     if (typeof fieldValue === 'object') {
       fieldValue[0].sendGift()
-      
+
       // All fields of this ship are already supplied?
-      if(fieldValue[0].isSupplied()) { 
-        
+      if(fieldValue[0].isSupplied()) {
+
         // Find index of ship in ships using coordPair
         const ind = ships.findIndex(ship => {
           // Check if coordPair is in current ship

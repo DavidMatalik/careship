@@ -1,9 +1,16 @@
+@font-face {
+  font-family: varelaRound;
+  src: url(VarelaRound-Regular.ttf);
+}
+
 body {
   position: relative;
   background-color: #ffe6e652;
+  font-family: varelaRound;
 }
 
 h1 {
+  font-family: varelaRound;
   background-color: #a685e2;
   text-align: center;
   padding: 20px;
@@ -18,6 +25,7 @@ section {
   font-size: 30px;
   font-weight: 700;
   color: #6155a6;
+  line-height: 40px;
 }
 
 #container {
@@ -66,13 +74,14 @@ section {
 #info-rotation {
   width: 200px;
   height: 100px;
-  font-size: 200%;
+  font-size: 175%;
   position: absolute;
   z-index: 1000;
   text-align: center;
   color: white;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
+  padding: 10px;
 }
 
 #boards-container {
@@ -126,6 +135,7 @@ path {
 }
 
 form {
+  font-family: varelaRound;
   width: 100%;
   align-self: center;
   margin-top: 30px;
@@ -138,12 +148,14 @@ form {
 label,
 input,
 button {
+  font-family: varelaRound;
   width: 200px;
   height: 40px;
   font-size: 20px;
 }
 
 #finish-container {
+  font-family: varelaRound;
   width: 300px;
   height: 120px;
   padding: 20px;
