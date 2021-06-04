@@ -45,6 +45,7 @@ section {
   margin: 10px;
   padding-top: 10px;
   border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%), 0 3px 10px 0 rgb(0 0 0 / 19%);
 }
 
 .ship-large,
@@ -56,6 +57,7 @@ section {
   border: 1px solid black;
   margin: 15px;
   border-radius: 5px;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 10%), 0 3px 10px 0 rgb(0 0 0 / 10%);
 }
 
 .ship-big {
@@ -107,6 +109,7 @@ section {
   border: 1px solid #6155a6;
   width: 450px;
   border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 10%), 0 3px 10px 0 rgb(0 0 0 / 10%);
 }
 
 .board-container {
@@ -132,6 +135,7 @@ section {
   padding-top: 6px;
   border-radius: 5px;
   background-color: white;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%), 0 3px 10px 0 rgb(0 0 0 / 10%);
 }
 
 /* Border for fish and heart icons */
@@ -161,6 +165,11 @@ button {
   border-radius: 5px;
 }
 
+input,
+button{
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 3px 10px 0 rgb(0 0 0 / 20%);
+}
+
 #finish-container {
   font-family: varelaRound;
   width: 300px;
@@ -175,6 +184,7 @@ button {
   background-color: #ffe6e6;
   border: 5px solid #a685e2;
   border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 3px 10px 0 rgb(0 0 0 / 20%);
 }
 
 .highlight {
