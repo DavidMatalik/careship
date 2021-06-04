@@ -17,6 +17,7 @@ h1 {
   font-size: 50px;
   font-weight: 700;
   color: white;
+  text-shadow: 2px 2px 4px #000000;
 }
 
 section {
@@ -93,8 +94,9 @@ section {
 }
 
 .name {
+  text-shadow: 1px 1px 2px #000000;
   background-color: #ffabe1;
-  color: #ffabe1;
+  color: white;
   text-align: center;
   padding: 25px;
   font-size: 25px;

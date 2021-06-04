@@ -5309,7 +5309,7 @@ __webpack_require__.r(__webpack_exports__);
     boardsContainer.appendChild(board2Container)
 
     playerName.classList.add('name')
-    playerName.innerHTML = 'Placeholder'
+    playerName.innerHTML = 'Your Board'
     computerName.classList.add('name')
 
     boardsContainer.id = 'boards-container'
@@ -5339,9 +5339,7 @@ __webpack_require__.r(__webpack_exports__);
       form.style.display = 'none'
       board2Container.style.display = 'block'
       playerName.innerHTML = `${nameInput.value}'s board`
-      playerName.style.color = '#6155a6'
       computerName.innerHTML = `Computer's board`
-      computerName.style.color = '#6155a6'
       addClickListeners(board2)
     }
   }
