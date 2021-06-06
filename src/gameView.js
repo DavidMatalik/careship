@@ -23,6 +23,7 @@ export default (function () {
   const finishMessage = document.createElement('p')
   const playAgainButton = document.createElement('button')
   const infoRotation = document.createElement('div')
+  const infoMobile = document.createElement('div')
 
   let draggedShipSections = null
   let draggedShipCopy = null
@@ -388,6 +389,22 @@ export default (function () {
     return form
   }
 
+  const createMobileMessage = () => {
+    infoMobile.id = 'info-mobile'
+    infoMobile.innerHTML = 'Sorry... Game only works on Desktop'
+
+    document.addEventListener('touchstart', (ev) => {
+      infoMobile.style.display = 'block'
+      infoMobile.style.top = ev.changedTouches[0].pageY + 10 + 'px'
+
+      setTimeout(() => {
+        infoMobile.remove()
+      }, 2500)
+    })
+    
+    return infoMobile
+  }
+
   const renderPlacingShips = () => {
     // reset necessary stuff
     resetBoard(board1)
@@ -414,6 +431,7 @@ export default (function () {
     body.appendChild(heading)
     body.appendChild(introduction)
     body.appendChild(container)
+    body.appendChild(createMobileMessage())
 
     finishContainer.appendChild(finishMessage)
     finishContainer.appendChild(playAgainButton)

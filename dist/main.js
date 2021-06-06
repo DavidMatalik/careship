@@ -4994,6 +4994,7 @@ __webpack_require__.r(__webpack_exports__);
   const finishMessage = document.createElement('p')
   const playAgainButton = document.createElement('button')
   const infoRotation = document.createElement('div')
+  const infoMobile = document.createElement('div')
 
   let draggedShipSections = null
   let draggedShipCopy = null
@@ -5359,13 +5360,28 @@ __webpack_require__.r(__webpack_exports__);
     return form
   }
 
+  const createMobileMessage = () => {
+    infoMobile.id = 'info-mobile'
+    infoMobile.innerHTML = 'Sorry... Game only works on Desktop'
+
+    document.addEventListener('touchstart', (ev) => {
+      infoMobile.style.display = 'block'
+      infoMobile.style.top = ev.changedTouches[0].pageY + 10 + 'px'
+
+      setTimeout(() => {
+        infoMobile.remove()
+      }, 2500)
+    })
+    
+    return infoMobile
+  }
+
   const renderPlacingShips = () => {
     // reset necessary stuff
     resetBoard(board1)
     addDragDropListeners(board1)
     resetBoard(board2)
-    playerName.innerHTML = 'Placeholder'
-    playerName.style.color = '#ffabe1'
+    playerName.innerHTML = 'Your Board'
     shipsPlacedArray = []
 
     // Hide and show necessary stuff
@@ -5386,6 +5402,7 @@ __webpack_require__.r(__webpack_exports__);
     body.appendChild(heading)
     body.appendChild(introduction)
     body.appendChild(container)
+    body.appendChild(createMobileMessage())
 
     finishContainer.appendChild(finishMessage)
     finishContainer.appendChild(playAgainButton)
