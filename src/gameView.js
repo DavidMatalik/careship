@@ -255,8 +255,8 @@ export default (function () {
       form.classList.remove('display-none')
       PubSub.publish('shipsPlaced', shipsPlacedArray)
       removeDragDropListeners(board1)
-      dragContainer.style.display = 'none'
-      introduction.style.display = 'none'
+      dragContainer.classList.add('display-none')
+      introduction.classList.add('display-none')
     }
   }
 
@@ -365,7 +365,7 @@ export default (function () {
       event.preventDefault()
       PubSub.publish('startClicked', nameInput.value)
       form.classList.add('display-none')
-      board2Container.style.display = 'block'
+      board2Container.classList.remove('display-none')
       playerName.innerHTML = `${nameInput.value}'s board`
       computerName.innerHTML = `Computer's board`
       addClickListeners(board2)
@@ -393,7 +393,7 @@ export default (function () {
     infoMobile.innerHTML = 'Sorry... Game only works on Desktop'
 
     document.addEventListener('touchstart', (ev) => {
-      infoMobile.style.display = 'block'
+      infoMobile.classList.remove('display-none')
       infoMobile.style.top = ev.changedTouches[0].pageY + 10 + 'px'
 
       setTimeout(() => {
@@ -413,10 +413,10 @@ export default (function () {
     shipsPlacedArray = []
 
     // Hide and show necessary stuff
-    dragContainer.style.display = 'block'
+    dragContainer.classList.remove('display-none')
     container.insertBefore(createDragZone(), container.firstChild)
-    board2Container.style.display = 'none'
-    finishContainer.style.display = 'none'
+    board2Container.classList.add('display-none')
+    finishContainer.classList.add('display-none')
   }
 
   const init = (boardSize) => {
@@ -441,11 +441,11 @@ export default (function () {
 
     introduction.innerHTML = 'This game is about supplying ships of your friend with gifts. Then your friend for sure feels better. Start by placing your ships.'
 
-    board2Container.style.display = 'none'
+    board2Container.classList.add('display-none')
 
     finishContainer.id = 'finish-container'
     finishMessage.id = 'finish-message'
-    finishContainer.style.display = 'none'
+    finishContainer.classList.add('display-none')
 
     playAgainButton.addEventListener('click', renderPlacingShips)
     playAgainButton.innerHTML = 'Play Again!'
@@ -512,7 +512,7 @@ export default (function () {
 
   const renderFinishDisplay = (msg, name) => {
     finishMessage.innerHTML = `${name} has supplied all ships!`
-    finishContainer.style.display = 'block'
+    finishContainer.classList.remove('display-none')
     removeFieldListeners(board2)
     nameInput.value = ''
   }
