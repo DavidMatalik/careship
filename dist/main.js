@@ -5433,10 +5433,10 @@ __webpack_require__.r(__webpack_exports__);
         const field = board1.querySelector(`[data-coords='${i}${j}']`)
         if (!field.hasChildNodes()) {
           if (boardDetails[i][j] === false) {
-            addIcon(field, 'fa-fish', '#a685e2')
+            addIcon(field, 'fa-fish', 'fish-color')
           }
           if (boardDetails[i][j] === true) {
-            addIcon(field, 'fa-hand-holding-heart', '#ffabe1')
+            addIcon(field, 'fa-hand-holding-heart', 'hand-holding-heart-color')
           }
         }
       }
@@ -5452,15 +5452,15 @@ __webpack_require__.r(__webpack_exports__);
         if (boardDetails[i][j] === 'shipSupplied') {
           field.innerHTML = ''
           field.classList.add('placed')
-          addIcon(field, 'fa-hand-holding-heart', '#ffabe1')
+          addIcon(field, 'fa-hand-holding-heart', 'hand-holding-heart-color')
         }
 
         if (!field.hasChildNodes()) {
           if (boardDetails[i][j] === false) {
-            addIcon(field, 'fa-fish', '#a685e2')
+            addIcon(field, 'fa-fish', 'fish-color')
           }
           if (boardDetails[i][j] === true) {
-            addIcon(field, 'fa-hand-holding-heart', '#ffabe1')
+            addIcon(field, 'fa-hand-holding-heart', 'hand-holding-heart-color')
           }
         }
       }
@@ -5471,7 +5471,7 @@ __webpack_require__.r(__webpack_exports__);
     const icon = document.createElement('i')
     icon.classList.add('fas', `${iconClass}`, 'fa-2x')
     element.appendChild(icon)
-    element.style.color = `${iconColor}`
+    element.classList.add(`${iconColor}`)
   }
 
   const removeFieldListeners = (board) => {
