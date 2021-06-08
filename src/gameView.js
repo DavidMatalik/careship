@@ -185,13 +185,13 @@ export default (function () {
         infoRotation.style.left = ev.pageX - infoRotation.offsetWidth / 2 + 'px'
 
         setTimeout(() => {
-          infoRotation.style.display = 'none'
+          // infoRotation.style.display = 'none'
+          infoRotation.remove()
         }, 2500)
       })
 
       document.addEventListener('dragend', () => {
         draggedShipCopy.remove()
-        infoRotation.remove()
       })
     }
 
