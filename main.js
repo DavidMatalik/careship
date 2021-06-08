@@ -5156,7 +5156,6 @@ __webpack_require__.r(__webpack_exports__);
         infoRotation.style.left = ev.pageX - infoRotation.offsetWidth / 2 + 'px'
 
         setTimeout(() => {
-          // infoRotation.style.display = 'none'
           infoRotation.remove()
         }, 2500)
       })
@@ -5224,7 +5223,7 @@ __webpack_require__.r(__webpack_exports__);
 
     // If all ships are dragged and dropped
     if (!dragContainer.hasChildNodes()) {
-      form.style.display = 'flex'
+      form.classList.remove('display-none')
       pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('shipsPlaced', shipsPlacedArray)
       removeDragDropListeners(board1)
       dragContainer.style.display = 'none'
@@ -5336,7 +5335,7 @@ __webpack_require__.r(__webpack_exports__);
       // preventDefault() prevents page from relaoding
       event.preventDefault()
       pubsub_js__WEBPACK_IMPORTED_MODULE_0___default().publish('startClicked', nameInput.value)
-      form.style.display = 'none'
+      form.classList.add('display-none')
       board2Container.style.display = 'block'
       playerName.innerHTML = `${nameInput.value}'s board`
       computerName.innerHTML = `Computer's board`
@@ -5355,6 +5354,7 @@ __webpack_require__.r(__webpack_exports__);
 
     startButton.innerHTML = 'Start new Game'
 
+    form.classList.add('display-none')
     form.addEventListener('submit', startGame)
     return form
   }
