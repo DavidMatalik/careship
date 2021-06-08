@@ -153,6 +153,14 @@ path {
   stroke-width: 25px;
 }
 
+.fish-color {
+  color: #a685e2;
+}
+
+.hand-holding-heart-color {
+  color: #ffabe1;
+}
+
 form {
   font-family: varelaRound;
   width: 100%;
