@@ -173,8 +173,7 @@ export default (function () {
       draggedShipSections = parseInt(ev.target.dataset.sections)
 
       draggedShipCopy = ship.cloneNode(true)
-      draggedShipCopy.style.position = 'absolute'
-      draggedShipCopy.style.transformOrigin = 'top left'
+      draggedShipCopy.classList.add('dragged-ship-position')
 
       document.body.append(draggedShipCopy)
 
@@ -200,7 +199,7 @@ export default (function () {
     // then display draggedElementCopy elementVerticalPosition
     ship.ondrag = (ev) => {
       if (ev.ctrlKey) {
-        draggedShipCopy.style.transform = 'rotate(90deg)'
+        draggedShipCopy.classList.add('dragged-ship-vertical')
         if (shipVerticalPosition === false) {
           shipVerticalPosition = true
           // Without whitenAllFields for some time elementVerticalPosition
@@ -208,7 +207,7 @@ export default (function () {
           whitenAllFields()
         }
       } else {
-        draggedShipCopy.style.transform = ''
+        draggedShipCopy.classList.remove('dragged-ship-vertical')
         if (shipVerticalPosition === true) {
           shipVerticalPosition = false
           // Without whitenAllFields for some time elementVerticalPosition

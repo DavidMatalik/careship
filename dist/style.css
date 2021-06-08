@@ -76,6 +76,15 @@ section {
   width: 100px;
 }
 
+.dragged-ship-position{
+  position: absolute;
+  transform-origin: top left;
+}
+
+.dragged-ship-vertical {
+  transform: rotate(90deg);
+}
+
 #info-rotation {
   width: 200px;
   height: 100px;
