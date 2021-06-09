@@ -30,6 +30,14 @@ export default (function () {
   let shipVerticalPosition = false
   let shipsPlacedArray = []
 
+  const toggle = (element) => {
+    if (element.classList.contains('display-none')) {
+      element.classList.remove('display-none')
+    } else {
+      element.classList.add('display-none')
+    }
+  }
+
   const createBoardFields = (size, board) => {
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
@@ -252,11 +260,11 @@ export default (function () {
 
     // If all ships are dragged and dropped
     if (!dragContainer.hasChildNodes()) {
-      form.classList.remove('display-none')
+      toggle(form)
       PubSub.publish('shipsPlaced', shipsPlacedArray)
       removeDragDropListeners(board1)
-      dragContainer.classList.add('display-none')
-      introduction.classList.add('display-none')
+      toggle(dragContainer)
+      toggle(introduction)
     }
   }
 
@@ -364,8 +372,8 @@ export default (function () {
       // preventDefault() prevents page from relaoding
       event.preventDefault()
       PubSub.publish('startClicked', nameInput.value)
-      form.classList.add('display-none')
-      board2Container.classList.remove('display-none')
+      toggle(form)
+      toggle(board2Container)
       playerName.innerHTML = `${nameInput.value}'s board`
       computerName.innerHTML = `Computer's board`
       addClickListeners(board2)
@@ -383,7 +391,7 @@ export default (function () {
 
     startButton.innerHTML = 'Start new Game'
 
-    form.classList.add('display-none')
+    toggle(form)
     form.addEventListener('submit', startGame)
     return form
   }
@@ -393,7 +401,7 @@ export default (function () {
     infoMobile.innerHTML = 'Sorry... Game only works on Desktop'
 
     document.addEventListener('touchstart', (ev) => {
-      infoMobile.classList.remove('display-none')
+      toggle(infoMobile)
       infoMobile.style.top = ev.changedTouches[0].pageY + 10 + 'px'
 
       setTimeout(() => {
@@ -413,10 +421,10 @@ export default (function () {
     shipsPlacedArray = []
 
     // Hide and show necessary stuff
-    dragContainer.classList.remove('display-none')
+    toggle(dragContainer)
     container.insertBefore(createDragZone(), container.firstChild)
-    board2Container.classList.add('display-none')
-    finishContainer.classList.add('display-none')
+    toggle(board2Container)
+    toggle(finishContainer)
   }
 
   const init = (boardSize) => {
@@ -441,11 +449,11 @@ export default (function () {
 
     introduction.innerHTML = 'This game is about supplying ships of your friend with gifts. Then your friend for sure feels better. Start by placing your ships.'
 
-    board2Container.classList.add('display-none')
+    toggle(board2Container)
 
     finishContainer.id = 'finish-container'
     finishMessage.id = 'finish-message'
-    finishContainer.classList.add('display-none')
+    toggle(finishContainer)
 
     playAgainButton.addEventListener('click', renderPlacingShips)
     playAgainButton.innerHTML = 'Play Again!'
@@ -512,7 +520,7 @@ export default (function () {
 
   const renderFinishDisplay = (msg, name) => {
     finishMessage.innerHTML = `${name} has supplied all ships!`
-    finishContainer.classList.remove('display-none')
+    toggle(finishContainer)
     removeFieldListeners(board2)
     nameInput.value = ''
   }
