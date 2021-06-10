@@ -4993,9 +4993,9 @@ __webpack_require__.r(__webpack_exports__);
   const finishContainer = document.createElement('div')
   const finishMessage = document.createElement('p')
   const playAgainButton = document.createElement('button')
-  const infoRotation = document.createElement('div')
   const infoMobile = document.createElement('div')
 
+  let infoRotation = document.createElement('div')
   let draggedShipSections = null
   let draggedShipCopy = null
   let shipVerticalPosition = false
@@ -5141,9 +5141,11 @@ __webpack_require__.r(__webpack_exports__);
   const makeShipDraggable = (ship) => {
     ship.draggable = 'true'
     ship.ondragstart = (ev) => {
-      infoRotation.id = 'info-rotation'
-      infoRotation.innerHTML = `Press and hold ctrl for vertical placing`
-      document.body.appendChild(infoRotation)
+      if(infoRotation){
+        infoRotation.id = 'info-rotation'
+        infoRotation.innerHTML = `Press and hold ctrl for vertical placing`
+        document.body.appendChild(infoRotation)
+      }
 
       var img = new Image()
       ev.dataTransfer.setDragImage(img, 0, 0)
@@ -5160,12 +5162,24 @@ __webpack_require__.r(__webpack_exports__);
         draggedShipCopy.style.top = ev.pageY + 10 + 'px'
         draggedShipCopy.style.left = ev.pageX + 'px'
 
-        infoRotation.style.top = ev.pageY + 10 + 'px'
-        infoRotation.style.left = ev.pageX - infoRotation.offsetWidth / 2 + 'px'
+        if (infoRotation){
+          infoRotation.style.top = ev.pageY + 10 + 'px'
+          infoRotation.style.left = ev.pageX - infoRotation.offsetWidth / 2 + 'px'
 
-        setTimeout(() => {
-          infoRotation.remove()
-        }, 2500)
+          setTimeout(() => {
+            if (infoRotation){
+              infoRotation.remove()
+            }
+            infoRotation = null
+          }, 2500)
+        }
+      })
+
+      document.addEventListener('mousemove', (ev) => {
+        if (infoRotation){
+          infoRotation.style.top = ev.pageY + 10 + 'px'
+          infoRotation.style.left = ev.pageX - infoRotation.offsetWidth / 2 + 'px'
+        }
       })
 
       document.addEventListener('dragend', () => {
