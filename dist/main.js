@@ -5148,19 +5148,19 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       var img = new Image()
+      img.src = 'transparent.png'
       ev.dataTransfer.setDragImage(img, 0, 0)
       ev.dataTransfer.setData('text', ev.target.id)
-      ev.dataTransfer.effectAllowed = 'all'
       draggedShipSections = parseInt(ev.target.dataset.sections)
 
       draggedShipCopy = ship.cloneNode(true)
       draggedShipCopy.classList.add('dragged-ship-position')
 
-      document.body.append(draggedShipCopy)
-
-      document.addEventListener('drag', (ev) => {
+      document.addEventListener('dragover', (ev) => {
         draggedShipCopy.style.top = ev.pageY + 10 + 'px'
         draggedShipCopy.style.left = ev.pageX + 'px'
+
+        document.body.append(draggedShipCopy)
 
         if (infoRotation){
           infoRotation.style.top = ev.pageY + 10 + 'px'
